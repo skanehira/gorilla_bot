@@ -1,0 +1,21 @@
+{
+    "token": "LtvQY52wsR2i5RpyzU4zgWfY",
+    "team_id": "TCANTPZJS",
+    "api_app_id": "ACE0FJHL5",
+    "event": {
+        "type": "member_joined_channel",
+        "user": "UC8M8LX5E",
+        "channel": "CCDEWHATT",
+        "channel_type": "C",
+        "team": "TCANTPZJS",
+        "event_ts": "1535039722.000100",
+        "inviter": "U123456789"
+    },
+    "type": "event_callback",
+    "event_id": "EvCF37M8TZ",
+    "event_time": 1535039722,
+    "authed_users": [
+        "UC8M8LX5E",
+        "UC8I8LX3D"
+    ]
+}
