@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export GorillaToken=token
-export GorillaType=url_verification
+export URLVerificationToken=
+export AuthorizationToken=
 
-./gorilla_bot 8080 >> gorilla_bot.log &
+./gorilla_bot 8080 >> gorilla_bot.`date +%Y-%m-%d`.log &
