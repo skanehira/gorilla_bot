@@ -1,10 +1,5 @@
 package event
 
-const (
-	URL_VERIFICATION = "url_verification"
-	EVENT_CALLBACK   = "event_callback"
-)
-
 // ValidRequestType valid Slack Request type
 // https://api.slack.com/events-api
 // Callback field overview
