@@ -118,7 +118,7 @@ func (s *Server) WelcomHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// send message
-		bot := bot.New(s.URLVerifyToken, s.AuthorizationToken, req.Event.Name())
-		bot.SendMessage("welcom joined gorilla-lab")
+		bot := bot.New(s.URLVerifyToken, s.AuthorizationToken, req.Event.ToMap()["User"].(string))
+		bot.SendMessage(bot.ReadMessageFromFile(s.MessageFile))
 	}
 }

@@ -15,6 +15,7 @@ type Config struct {
 	SSLCertificateKeyFile string
 	URLVerifyToken        string
 	AuthorizationToken    string
+	MessageFile           string
 }
 
 // New new config

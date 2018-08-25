@@ -3,6 +3,10 @@ package common
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"log"
 	"time"
 )
 
@@ -19,4 +23,15 @@ func FormatStringJoin(j string) string {
 // TimeNow Get formated time now
 func TimeNow() string {
 	return time.Now().Format("2006-01-02 15:04:05")
+}
+
+// ReadFile read data from file
+func ReadFile(file string) ([]byte, error) {
+	data, err := ioutil.ReadFile(file)
+	if err != nil {
+		msg := fmt.Sprintf("read message file is failed %s", err)
+		log.Printf("[%s] %s", TimeNow(), msg)
+		return make([]byte, 0), errors.New(msg)
+	}
+	return data, nil
 }
