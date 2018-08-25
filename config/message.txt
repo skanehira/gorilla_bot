@@ -1,0 +1,2 @@
+this is sample message
+when member joined channel, this message will be send to member
