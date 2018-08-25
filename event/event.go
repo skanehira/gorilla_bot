@@ -10,7 +10,7 @@ var ValidRequestType = map[string]struct{}{
 
 // Event Slack Event type
 type Event interface {
-	Name() string
+	ToMap() map[string]interface{}
 }
 
 // RequestType Slac Request Type [url_verification,event_callback...]

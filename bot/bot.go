@@ -3,7 +3,6 @@ package bot
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"gorilla_bot/common"
 	"io/ioutil"
@@ -30,13 +29,14 @@ func New(urlToken, authToken, toChnnel string) *Bot {
 	}
 }
 
-// Authenticate check token
-func (b *Bot) Authenticate(urlToken, authToken string) error {
-	if !(b.AuthorizationToken == authToken && b.URLVerifyToken == urlToken) {
-		return errors.New("Authentication failure")
+// ReadMessageFromFile read send message from file
+func (b *Bot) ReadMessageFromFile(file string) string {
+	data, err := common.ReadFile(file)
+	if err != nil {
+		panic(err)
 	}
 
-	return nil
+	return string(data)
 }
 
 // SendMessage send message to user in DM
@@ -46,7 +46,7 @@ func (b *Bot) SendMessage(message string) {
 	body, err := json.Marshal(NewMessage(b.ToChannel, message))
 
 	if err != nil {
-		log.Printf("[%s] create request body is failed: %s", common.TimeNow(), err)
+		log.Printf("[%s] create send request body is failed: %s", common.TimeNow(), err)
 	}
 
 	// new request
@@ -60,14 +60,14 @@ func (b *Bot) SendMessage(message string) {
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", b.AuthorizationToken))
 
-	log.Printf("[%s] request header: %s\n", common.TimeNow(), req.Header)
-	log.Printf("[%s] request body: \n%s\n", common.TimeNow(), common.FormatStringJoin(string(body)))
+	log.Printf("[%s] send request header: %s\n", common.TimeNow(), req.Header)
+	log.Printf("[%s] send request body: \n%s\n", common.TimeNow(), common.FormatStringJoin(string(body)))
 
 	// send message
 	res, err := client.Do(req)
 
 	if err != nil {
-		log.Printf("[%s] request error cause [%s]\n", common.TimeNow(), err)
+		log.Printf("[%s] send request is failed [%s]\n", common.TimeNow(), err)
 		return
 	}
 
