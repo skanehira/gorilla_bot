@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"reflect"
 	"time"
 )
 
@@ -34,4 +35,19 @@ func ReadFile(file string) ([]byte, error) {
 		return make([]byte, 0), errors.New(msg)
 	}
 	return data, nil
+}
+
+// StructToMap struct convert to map
+func StructToMap(data interface{}) map[string]interface{} {
+	result := make(map[string]interface{})
+	elem := reflect.ValueOf(data).Elem()
+	size := elem.NumField()
+
+	for i := 0; i < size; i++ {
+		field := elem.Type().Field(i).Name
+		value := elem.Field(i).Interface()
+		result[field] = value
+	}
+
+	return result
 }

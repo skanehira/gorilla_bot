@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 // new http client
@@ -31,12 +32,15 @@ func New(urlToken, authToken, toChnnel string) *Bot {
 
 // ReadMessageFromFile read send message from file
 func (b *Bot) ReadMessageFromFile(file string) string {
+
+	// read mesasge template from file
 	data, err := common.ReadFile(file)
 	if err != nil {
 		panic(err)
 	}
 
-	return string(data)
+	// get channel list. add to message
+	return b.addChannelsToMessage(string(data))
 }
 
 // SendMessage send message to user in DM
@@ -47,6 +51,7 @@ func (b *Bot) SendMessage(message string) {
 
 	if err != nil {
 		log.Printf("[%s] create send request body is failed: %s", common.TimeNow(), err)
+		return
 	}
 
 	// new request
@@ -81,4 +86,63 @@ func (b *Bot) SendMessage(message string) {
 	}
 
 	log.Printf("[%s] response body: \n%s\n", common.TimeNow(), common.FormatStringJoin(string(body)))
+}
+
+// GetChannelList get slack workspace channel list
+func (b *Bot) GetChannelList() *Channels {
+	req, err := http.NewRequest(
+		http.MethodGet,
+		ChannelListURL,
+		nil,
+	)
+
+	if err != nil {
+		log.Printf("[%s] create send request body is failed: %s", common.TimeNow(), err)
+		return NewChannels()
+	}
+
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", b.AuthorizationToken))
+
+	// get channel list
+	res, err := client.Do(req)
+	if err != nil {
+		log.Printf("[%s] send request is failed: %s", common.TimeNow(), err)
+		return NewChannels()
+	}
+
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+
+	// new channel
+	if err != nil {
+		log.Printf("[%s] bad response body: %s", common.TimeNow(), err)
+		return NewChannels()
+	}
+
+	// new channel
+	channels := NewChannels()
+
+	if err := json.Unmarshal(body, channels); err != nil {
+		log.Printf("[%s] unmarshal body is failed: %s ", common.TimeNow(), err)
+		return channels
+	}
+
+	return channels
+}
+
+// add channels to message
+func (b *Bot) addChannelsToMessage(oldMessage string) string {
+	// channels to strings
+	var channels = []string{}
+
+	for _, channel := range b.GetChannelList().Channels {
+		channels = append(channels, fmt.Sprintf("#%-30s %s", channel.Name, channel.Purpose.Value))
+	}
+
+	// channel to text
+	channelText := strings.Join(channels, "\n")
+	message := strings.Replace(oldMessage, "{channel_list}", channelText, -1)
+
+	return message
 }

@@ -1,8 +1,6 @@
 package event
 
-import (
-	"reflect"
-)
+import "gorilla_bot/common"
 
 // MemberJoinedChannel Member join channel event
 type MemberJoinedChannel struct {
@@ -16,20 +14,10 @@ type MemberJoinedChannel struct {
 
 // NewMemberJoinedChannel New struct
 func NewMemberJoinedChannel() *MemberJoinedChannel {
-	return &MemberJoinedChannel{}
+	return new(MemberJoinedChannel)
 }
 
 // ToMap event struct to map
 func (m *MemberJoinedChannel) ToMap() map[string]interface{} {
-	event := make(map[string]interface{})
-	element := reflect.ValueOf(m).Elem()
-	size := element.NumField()
-
-	for i := 0; i < size; i++ {
-		key := element.Type().Field(i).Name
-		value := element.Field(i).Interface()
-		event[key] = value
-	}
-
-	return event
+	return common.StructToMap(m)
 }
