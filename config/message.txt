@@ -1,5 +1,5 @@
 gorilla-labへようこそ！
-コミュニティを運営しているゴリラです！
+コミュニティのヌシに変わってgorilla_botのぼくが案内をしますね！
 
 こちらのコミュニティは
 ・これからITエンジニアになりたい方
@@ -18,7 +18,6 @@ gorilla-labへようこそ！
 まだ発足したばっかりですが、
 よりみなさんをサポートしていける体制を作ってまいりますので、
 ぜひ、ご自身の勉強にこのコミュニティを使ってください。
-
 
 【gorilla-labのご利用方法】
 コミュニティの利用方法について、
@@ -63,35 +62,7 @@ gorilla-labへようこそ！
 
 ■チャンネル一覧
 -----------------
-#general          全体周知
-#about-me         自己紹介
-#fw-spring
-#fw-vuejs
-#infra-network
-#infra-server
-#lang-c-sharp
-#lang-css
-#lang-html
-#lang-javascript
-#lang-golang
-#lang-java
-#lang-php
-#lang-python
-#lang-ruby
-#lang-sql
-#lang-swift
-#tool-git
-#tool-svn
-#tool-ide
-#question
-#tool-git
-#tool-ide
-#tool-svn
-#tool-docker
-#ソースレビュー   コードをレビューしてもらいたい&したい時にどうぞ
-#作ってみた       作ってみたモノを共有し合って、アイディア出し合い・視野を広げる用
-#就活             就職・転職で困った時に相談する場所（個別相談ももちろんWelcom！）
-#知恵ノート       仕事をする上で、ためになる知識をここにみんなで書き込んでナレッジとして貯める
+{channel_list}
 -----------------
 
 各チャンネルの使い方のイメージとして…
