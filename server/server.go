@@ -30,7 +30,7 @@ func New() *Server {
 
 // SetHandler add handler to server
 func (s *Server) SetHandler() {
-	http.HandleFunc(s.Endpoint, s.WelcomHandler)
+	http.HandleFunc(s.Endpoint, s.Handler)
 }
 
 // SetConfig load config

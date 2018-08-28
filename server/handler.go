@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"gorilla_bot/bot"
 	"gorilla_bot/common"
-	"gorilla_bot/event"
 	"gorilla_bot/types"
 	"io/ioutil"
 	"log"
@@ -33,8 +32,8 @@ func NewResponse(w http.ResponseWriter, code int, data interface{}) {
 	w.Write(body)
 }
 
-// WelcomHandler url_verification or someone events
-func (s *Server) WelcomHandler(w http.ResponseWriter, r *http.Request) {
+// Handler url_verification or someone events
+func (s *Server) Handler(w http.ResponseWriter, r *http.Request) {
 	// output request body
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -47,7 +46,7 @@ func (s *Server) WelcomHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[%s] request body: \n%s\n", common.TimeNow(), common.FormatStringJoin(string(body)))
 
 	// get request type
-	rtype := new(event.RequestType)
+	rtype := new(types.RequestType)
 
 	if err := json.Unmarshal(body, rtype); err != nil {
 		msg := fmt.Sprintf("Bad request body [%s]", err)
@@ -56,7 +55,7 @@ func (s *Server) WelcomHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !event.IsValidRequestType(rtype.Type) {
+	if !types.IsValidRequestType(rtype.Type) {
 		msg := fmt.Sprintf("Bad request type [%s]", rtype.Type)
 		log.Printf("[%s] %s\n", common.TimeNow(), msg)
 		NewResponse(w, http.StatusBadRequest, NewErrorMessage(msg))
@@ -71,7 +70,7 @@ func (s *Server) WelcomHandler(w http.ResponseWriter, r *http.Request) {
 			log.Printf("[%s] verification end from %s\n", common.TimeNow(), r.RemoteAddr)
 		}()
 
-		req := new(event.ChallengeRequest)
+		req := new(types.ChallengeRequest)
 		if err := json.Unmarshal(body, req); err != nil {
 			msg := fmt.Sprintf("Bad request data %+v", r.Body)
 			log.Printf("[%s] %s\n", common.TimeNow(), msg)
@@ -89,7 +88,7 @@ func (s *Server) WelcomHandler(w http.ResponseWriter, r *http.Request) {
 
 		// success verification
 		log.Printf("[%s] success verification from %s\n", common.TimeNow(), r.RemoteAddr)
-		NewResponse(w, http.StatusOK, event.NewChallenge(req.Challenge.Challenge))
+		NewResponse(w, http.StatusOK, types.NewChallenge(req.Challenge.Challenge))
 		return
 	}
 
@@ -101,7 +100,7 @@ func (s *Server) WelcomHandler(w http.ResponseWriter, r *http.Request) {
 			log.Printf("[%s] event_callback end from %s\n", common.TimeNow(), r.RemoteAddr)
 		}()
 
-		req := event.NewRequest(event.NewMemberJoinedChannel())
+		req := types.NewRequest(types.NewMemberJoinedChannel())
 		if err := json.Unmarshal(body, req); err != nil {
 			msg := fmt.Sprintf("Bad request data %+v", r.Body)
 			log.Printf("[%s] %s\n", common.TimeNow(), msg)
@@ -118,7 +117,7 @@ func (s *Server) WelcomHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// send message
-		bot := bot.New(s.URLVerifyToken, s.AuthorizationToken, req.Event.ToMap()["User"].(string))
+		bot := bot.New(s.Config, s.URLVerifyToken, s.AuthorizationToken, req.Event.ToMap()["User"].(string))
 		bot.SendMessage(bot.ReadMessageFromFile(s.MessageFile))
 	}
 }

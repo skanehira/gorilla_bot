@@ -16,6 +16,8 @@ type Config struct {
 	URLVerifyToken        string
 	AuthorizationToken    string
 	MessageFile           string
+	PostMessageURL        string
+	ChannelListURL        string
 }
 
 // New new config

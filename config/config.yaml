@@ -6,3 +6,5 @@ sslcertificatekeyfile: config/server.key
 urlverifytoken: Jhj5dZrVaK7ZwHHjRyZWjbDl
 authorizationtoken: Jhj5dZrVaK7ZwHHjRyZWjbDl
 messagefile: config/message.txt
+postmessageurl: https://slack.com/api/chat.postMessage
+channellisturl: https://slack.com/api/channels.list

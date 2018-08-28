@@ -1,7 +1,4 @@
-package bot
-
-// PostMessageURL send message url
-var PostMessageURL = "https://slack.com/api/chat.postMessage"
+package types
 
 // Message slack message
 // https://api.slack.com/methods/chat.postMessage
