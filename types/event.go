@@ -1,4 +1,4 @@
-package event
+package types
 
 // ValidRequestType valid Slack Request type
 // https://api.slack.com/events-api

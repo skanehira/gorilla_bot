@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"gorilla_bot/common"
+	"gorilla_bot/config"
+	"gorilla_bot/types"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -16,14 +18,16 @@ var client = new(http.Client)
 
 // Bot slack bot
 type Bot struct {
+	config.Config
 	URLVerifyToken     string
 	AuthorizationToken string
 	ToChannel          string
 }
 
 // New new slack bot
-func New(urlToken, authToken, toChnnel string) *Bot {
+func New(config config.Config, urlToken, authToken, toChnnel string) *Bot {
 	return &Bot{
+		Config:             config,
 		URLVerifyToken:     urlToken,
 		AuthorizationToken: authToken,
 		ToChannel:          toChnnel,
@@ -47,7 +51,7 @@ func (b *Bot) ReadMessageFromFile(file string) string {
 func (b *Bot) SendMessage(message string) {
 
 	// marshal request body
-	body, err := json.Marshal(NewMessage(b.ToChannel, message))
+	body, err := json.Marshal(types.NewMessage(b.ToChannel, message))
 
 	if err != nil {
 		log.Printf("[%s] create send request body is failed: %s", common.TimeNow(), err)
@@ -57,7 +61,7 @@ func (b *Bot) SendMessage(message string) {
 	// new request
 	req, err := http.NewRequest(
 		http.MethodPost,
-		PostMessageURL,
+		b.PostMessageURL,
 		bytes.NewBuffer(body),
 	)
 
@@ -89,16 +93,16 @@ func (b *Bot) SendMessage(message string) {
 }
 
 // GetChannelList get slack workspace channel list
-func (b *Bot) GetChannelList() *Channels {
+func (b *Bot) GetChannelList() *types.Channels {
 	req, err := http.NewRequest(
 		http.MethodGet,
-		ChannelListURL,
+		b.ChannelListURL,
 		nil,
 	)
 
 	if err != nil {
 		log.Printf("[%s] create send request body is failed: %s", common.TimeNow(), err)
-		return NewChannels()
+		return types.NewChannels()
 	}
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", b.AuthorizationToken))
@@ -107,7 +111,7 @@ func (b *Bot) GetChannelList() *Channels {
 	res, err := client.Do(req)
 	if err != nil {
 		log.Printf("[%s] send request is failed: %s", common.TimeNow(), err)
-		return NewChannels()
+		return types.NewChannels()
 	}
 
 	defer res.Body.Close()
@@ -117,11 +121,11 @@ func (b *Bot) GetChannelList() *Channels {
 	// new channel
 	if err != nil {
 		log.Printf("[%s] bad response body: %s", common.TimeNow(), err)
-		return NewChannels()
+		return types.NewChannels()
 	}
 
 	// new channel
-	channels := NewChannels()
+	channels := types.NewChannels()
 
 	if err := json.Unmarshal(body, channels); err != nil {
 		log.Printf("[%s] unmarshal body is failed: %s ", common.TimeNow(), err)
