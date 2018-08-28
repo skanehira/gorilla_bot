@@ -1,4 +1,4 @@
-package event
+package types
 
 // ChallengeRequest Verification URL Request
 type ChallengeRequest struct {

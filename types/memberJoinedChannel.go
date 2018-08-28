@@ -1,4 +1,4 @@
-package event
+package types
 
 import "gorilla_bot/common"
 
@@ -17,7 +17,7 @@ func NewMemberJoinedChannel() *MemberJoinedChannel {
 	return new(MemberJoinedChannel)
 }
 
-// ToMap event struct to map
+// ToMap implements Event interface
 func (m *MemberJoinedChannel) ToMap() map[string]interface{} {
 	return common.StructToMap(m)
 }

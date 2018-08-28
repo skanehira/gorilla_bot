@@ -1,7 +1,4 @@
-package bot
-
-// ChannelListURL slack Channel URL
-var ChannelListURL = "https://slack.com/api/channels.list"
+package types
 
 // Channels slack api will return this Channel
 type Channels struct {
