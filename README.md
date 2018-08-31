@@ -16,11 +16,17 @@ sslcertificatekeyfile: config/server.key # ssl private key file *but it's not wo
 urlverifytoken: Jhj5dZrVaK7ZwHHjRyZWjbDl # set your verification token 
 authorizationtoken: Jhj5dZrVaK7ZwHHjRyZWjbDl # set your bot user's auth token
 messagefile: config/message.txt # send message read from this txet
+watchchannels: # send message when member join this channels
+    - about-me
+    - question
 ```
 
 ### 2. build bot
 ```
+cd $GOPATH/src
+git clone https://github.com/skanehira/gorilla_bot.git
 cd gorilla_bot
+go get ./...
 go build
 ```
 
