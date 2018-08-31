@@ -116,8 +116,12 @@ func (s *Server) Handler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// send message
+		// new bot
 		bot := bot.New(s.Config, s.URLVerifyToken, s.AuthorizationToken, req.Event.ToMap()["User"].(string))
-		bot.SendMessage(bot.ReadMessageFromFile(s.MessageFile))
+
+		// when event from bot watched channels, send message to joined member
+		if bot.IsWatchChannel(req.Event.(*types.MemberJoinedChannel)) {
+			bot.SendMessage(bot.ReadMessageFromFile(s.MessageFile))
+		}
 	}
 }

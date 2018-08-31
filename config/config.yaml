@@ -8,3 +8,6 @@ authorizationtoken: Jhj5dZrVaK7ZwHHjRyZWjbDl
 messagefile: config/message.txt
 postmessageurl: https://slack.com/api/chat.postMessage
 channellisturl: https://slack.com/api/channels.list
+watchchannels:
+    - about-me
+    - question

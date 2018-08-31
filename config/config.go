@@ -18,6 +18,7 @@ type Config struct {
 	MessageFile           string
 	PostMessageURL        string
 	ChannelListURL        string
+	WatchChannels         []string
 }
 
 // New new config
