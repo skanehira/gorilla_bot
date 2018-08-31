@@ -5,7 +5,8 @@
         "event": {
                 "type": "name_of_event",
                 "event_ts": "1234567890.123456",
-                "user": "UXXXXXXX1"
+                "user": "UXXXXXXX1",
+                "channel": "about-me"
         },
         "type": "event_callback",
         "authed_users": [

@@ -22,6 +22,7 @@ type Bot struct {
 	URLVerifyToken     string
 	AuthorizationToken string
 	ToChannel          string
+	Channels           *types.Channels
 }
 
 // New new slack bot
@@ -90,10 +91,11 @@ func (b *Bot) SendMessage(message string) {
 	}
 
 	log.Printf("[%s] response body: \n%s\n", common.TimeNow(), common.FormatStringJoin(string(body)))
+
 }
 
 // GetChannelList get slack workspace channel list
-func (b *Bot) GetChannelList() *types.Channels {
+func (b *Bot) GetChannelList() {
 	req, err := http.NewRequest(
 		http.MethodGet,
 		b.ChannelListURL,
@@ -102,7 +104,7 @@ func (b *Bot) GetChannelList() *types.Channels {
 
 	if err != nil {
 		log.Printf("[%s] create send request body is failed: %s", common.TimeNow(), err)
-		return types.NewChannels()
+		return
 	}
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", b.AuthorizationToken))
@@ -111,7 +113,7 @@ func (b *Bot) GetChannelList() *types.Channels {
 	res, err := client.Do(req)
 	if err != nil {
 		log.Printf("[%s] send request is failed: %s", common.TimeNow(), err)
-		return types.NewChannels()
+		return
 	}
 
 	defer res.Body.Close()
@@ -121,7 +123,7 @@ func (b *Bot) GetChannelList() *types.Channels {
 	// new channel
 	if err != nil {
 		log.Printf("[%s] bad response body: %s", common.TimeNow(), err)
-		return types.NewChannels()
+		return
 	}
 
 	// new channel
@@ -129,10 +131,10 @@ func (b *Bot) GetChannelList() *types.Channels {
 
 	if err := json.Unmarshal(body, channels); err != nil {
 		log.Printf("[%s] unmarshal body is failed: %s ", common.TimeNow(), err)
-		return channels
+		return
 	}
 
-	return channels
+	b.Channels = channels
 }
 
 // add channels to message
@@ -140,7 +142,7 @@ func (b *Bot) addChannelsToMessage(oldMessage string) string {
 	// channels to strings
 	var channels = []string{}
 
-	for _, channel := range b.GetChannelList().Channels {
+	for _, channel := range b.Channels.Channels {
 		channels = append(channels, fmt.Sprintf("#%-30s %s", channel.Name, channel.Purpose.Value))
 	}
 
@@ -149,4 +151,28 @@ func (b *Bot) addChannelsToMessage(oldMessage string) string {
 	message := strings.Replace(oldMessage, "{channel_list}", channelText, -1)
 
 	return message
+}
+
+// IsWatchChannel check bot watched channel
+func (b *Bot) IsWatchChannel(memberJoin *types.MemberJoinedChannel) bool {
+	// get channel list
+	b.GetChannelList()
+
+	channels := map[string]string{}
+	for _, channel := range b.Channels.Channels {
+		channels[channel.ID] = channel.Name
+	}
+
+	channelName, ok := channels[memberJoin.Channel]
+	if !ok {
+		return false
+	}
+
+	// if watching channels is no in slack channels, will be return false
+	watches := map[string]bool{}
+	for _, name := range b.Config.WatchChannels {
+		watches[name] = true
+	}
+
+	return watches[channelName]
 }
