@@ -1,6 +1,6 @@
 package types
 
-import "gorilla_bot/common"
+import "github.com/skanehira/gorilla_bot/common"
 
 // MemberJoinedChannel Member join channel event
 type MemberJoinedChannel struct {

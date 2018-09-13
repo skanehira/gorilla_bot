@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"gorilla_bot/common"
-	"gorilla_bot/config"
-	"gorilla_bot/types"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/skanehira/gorilla_bot/common"
+	"github.com/skanehira/gorilla_bot/config"
+	"github.com/skanehira/gorilla_bot/types"
 )
 
 // new http client

@@ -3,11 +3,12 @@ package server
 import (
 	"crypto/tls"
 	"fmt"
-	"gorilla_bot/common"
-	"gorilla_bot/config"
 	"log"
 	"net"
 	"net/http"
+
+	"github.com/skanehira/gorilla_bot/common"
+	"github.com/skanehira/gorilla_bot/config"
 )
 
 // Server https server

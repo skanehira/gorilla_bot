@@ -1,8 +1,9 @@
 package main
 
 import (
-	"gorilla_bot/server"
 	"log"
+
+	"github.com/skanehira/gorilla_bot/server"
 )
 
 func main() {

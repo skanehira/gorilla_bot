@@ -3,12 +3,13 @@ package server
 import (
 	"encoding/json"
 	"fmt"
-	"gorilla_bot/bot"
-	"gorilla_bot/common"
-	"gorilla_bot/types"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/skanehira/gorilla_bot/bot"
+	"github.com/skanehira/gorilla_bot/common"
+	"github.com/skanehira/gorilla_bot/types"
 )
 
 // ErrorMessage Error Message
